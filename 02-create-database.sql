@@ -96,3 +96,33 @@ create table if not exists order_adjustment(
   described_by uuid not null references order_adjustment_type(id),
   CONSTRAINT order_adjustment_pk PRIMARY key(id)
 );
+
+create table if not exists order_term_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT ordre_term_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT order_term_type_pk PRIMARY key(id)
+);
+
+create table if not exists order_term(
+  id uuid DEFAULT uuid_generate_v4(),
+  term_value double precision not null,
+  condition_for_order_item uuid references order_item(id),
+  condition_for_order uuid references "order"(id),
+  described_by uuid not null references order_term_type(id),
+  CONSTRAINT order_term_pk PRIMARY key(id)
+);
+
+create table if not exists order_status_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT order_status_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT order_status_type_pk PRIMARY key(id)
+);
+
+create table if not exists order_status(
+  id uuid DEFAULT uuid_generate_v4(),
+  status timestamp not null default CURRENT_TIMESTAMP,
+  status_for_order_item uuid references order_item(id),
+  status_for_order uuid references "order"(id),
+  described_by uuid not null references order_status_type(id),
+  CONSTRAINT order_status_pk PRIMARY key(id)
+);
