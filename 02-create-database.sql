@@ -72,3 +72,27 @@ create table if not exists order_role(
   assigned_to_party_id uuid not null,
   CONSTRAINT order_role_pk PRIMARY key(id)
 );
+
+create table if not exists sales_tax_lookup(
+  id uuid DEFAULT uuid_generate_v4(),
+  sales_tax_percentage double precision not null,
+  geographic_boundary_id uuid not null,
+  product_category_id uuid not null,
+  CONSTRAINT sales_tax_lookup_pk PRIMARY key(id)
+);
+
+create table if not exists order_adjustment_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT order_adjustment_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT order_adjustment_type_pk PRIMARY key(id)
+);
+
+create table if not exists order_adjustment(
+  id uuid DEFAULT uuid_generate_v4(),
+  amount double precision,
+  percentage double precision,
+  affecting_order_item_id uuid references order_item(id),
+  affecting_order_it uuid references "order"(id),
+  described_by uuid not null references order_adjustment_type(id),
+  CONSTRAINT order_adjustment_pk PRIMARY key(id)
+);
