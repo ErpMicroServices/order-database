@@ -29,3 +29,46 @@ create table if not exists order_item(
   order_type_id uuid not null references order_type(id),
   CONSTRAINT order_item_pk PRIMARY key(id)
 );
+
+create table if not exists order_item_role_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT order_item_role_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT oreder_item_role_type_pk PRIMARY key(id)
+);
+
+create table if not exists order_item_role(
+  id uuid DEFAULT uuid_generate_v4(),
+  order_item_id uuid not null references order_item(id),
+  assigned_to_party_id uuid not null,
+  described_by uuid not null references order_item_role_type(id),
+  CONSTRAINT order_item_role_pk PRIMARY key(id)
+);
+
+create table if not exists order_item_contact_mechanism(
+  id uuid DEFAULT uuid_generate_v4(),
+  used_with uuid not null references order_item(id),
+  used_for_contact_mechanism_purpose_type_id uuid not null,
+  assigned_to_contact_mechansim uuid not null,
+  CONSTRAINT order_item_contact_mechanism_pk PRIMARY key(id)
+);
+
+create table if not exists order_contact_mechanism(
+  id uuid DEFAULT uuid_generate_v4(),
+  used_with uuid not null references order_item(id),
+  used_for_contact_mechanism_purpose_type_id uuid not null,
+  assigned_to_contact_mechansim uuid not null,
+  CONSTRAINT order_contact_mechanism_pk PRIMARY key(id)
+);
+
+create table if not exists order_role_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT order_role_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT order_role_type_pk PRIMARY key(id)
+);
+
+create table if not exists order_role(
+  id uuid DEFAULT uuid_generate_v4(),
+  percent_contribution double precision default 1,
+  assigned_to_party_id uuid not null,
+  CONSTRAINT order_role_pk PRIMARY key(id)
+);
