@@ -126,3 +126,10 @@ create table if not exists order_status(
   described_by uuid not null references order_status_type(id),
   CONSTRAINT order_status_pk PRIMARY key(id)
 );
+
+create table if not exists order_item_association(
+  id uuid DEFAULT uuid_generate_v4(),
+  sales_order_item uuid not null references order_item(id),
+  purchase_order_item uuid not null references order_item(id),
+  CONSTRAINT order_item_association_pk PRIMARY key(id)
+);
