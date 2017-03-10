@@ -28,3 +28,8 @@ insert into agreement_item_type (description) values ('Sub Agreement');
 insert into agreement_item_type (description) values ('Agreement Section');
 insert into agreement_item_type (description) values ('Agreement Pricing Program');
 insert into agreement_item_type (description) values ('Agreement Exhibit');
+
+insert into agreement_term_type (description) values ('Legal Term');
+insert into agreement_term_type (description) values ('Financial Term');
+insert into agreement_term_type (description) values ('Incentive Term');
+insert into agreement_term_type (description) values ('Threshold');

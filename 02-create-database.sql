@@ -385,3 +385,19 @@ create table if not exists addendum(
   modification_of_agreement uuid references agreement(id),
   CONSTRAINT addendum_pk PRIMARY key(id)
 );
+
+create table if not exists agreement_term_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT agreement_term_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT agreeemnt_term_type_pk PRIMARY key(id)
+);
+
+create table if not exists agreement_term(
+  id uuid DEFAULT uuid_generate_v4(),
+  from_date date not null default current_date,
+  thru_date date,
+  value text not null,
+  agreement_item_id uuid references agreement_item(id),
+  agreement_id uuid,
+  CONSTRAINT agreement_term_pk PRIMARY key(id)
+);
