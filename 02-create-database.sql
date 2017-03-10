@@ -309,3 +309,34 @@ create table if not exists quote_item(
   work_effort_id uuid,
   CONSTRAINT quote_item_pk PRIMARY key(id)
 );
+
+create table if not exists agreement_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT agreement_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT agreement_type_pk PRIMARY key(id)
+);
+
+create table if not exists agreement(
+  id uuid DEFAULT uuid_generate_v4(),
+  agreement_date date not null,
+  from_date date not null default current_date,
+  thru_date date,
+  description text not null constraint agreement_description_not_empty check (description <> ''),
+  "text" text not null constraint agreement_text_not_empty check ("text" <> ''),
+  party_relationship_id uuid not null,
+  CONSTRAINT agreement_pk PRIMARY key(id)
+);
+
+create table if not exists agreement_role_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT agreement_role_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT agreement_role_type_pk PRIMARY key(id)
+);
+
+create table if not exists agreement_role(
+  id uuid DEFAULT uuid_generate_v4(),
+  agreement_id uuid not null references agreement(id),
+  described_by uuid not null references agreement_role_type(id),
+  party_id uuid not null,
+  CONSTRAINT agreement_role_pk PRIMARY key(id)
+);

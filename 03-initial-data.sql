@@ -19,3 +19,7 @@ insert into request_type (description) values ('RFQ');
 
 insert into quote_type (description) values ('Proposal');
 insert into quote_type (description) values ('Product Quote');
+
+insert into agreement_type (description) values ('Sales Agreement');
+insert into agreement_type (description) values ('Purchase Agreement');
+insert into agreement_type (description) values ('Employment Agreement');
