@@ -133,3 +133,65 @@ create table if not exists order_item_association(
   purchase_order_item uuid not null references order_item(id),
   CONSTRAINT order_item_association_pk PRIMARY key(id)
 );
+
+create table if not exists requirement_role_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT requirement_role_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT requirement_role_type_pk PRIMARY key(id)
+);
+
+create table if not exists requirement_status_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT requirement_status_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT requirement_status_type_pk PRIMARY key(id)
+);
+
+create table if not exists requirement_status(
+  id uuid DEFAULT uuid_generate_v4(),
+  status_date date default current_date,
+  CONSTRAINT requirement_status_pk PRIMARY key(id)
+);
+
+create table if not exists requirement_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT requirement_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT requirement_type_pk PRIMARY key(id)
+);
+
+create table if not exists desired_feature(
+  id uuid DEFAULT uuid_generate_v4(),
+  feautre_id uuid not null,
+  optional_ind boolean default false,
+  CONSTRAINT desired_feature_pk PRIMARY key(id)
+);
+
+create table if not exists requirement(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT requirement_role_type_description_not_empty CHECK (description <> ''),
+  requirement_creation_date date default current_date,
+  required_by date not null,
+  estimated_budget double precision,
+  quantity bigint,
+  reason text,
+  composed_of uuid references requirement(id),
+  part_of uuid references requirement(id),
+  needed_at_facility uuid,
+  requesting_product uuid,
+  CONSTRAINT requirement_pk PRIMARY key(id)
+);
+create table if not exists requirement_role(
+  id uuid DEFAULT uuid_generate_v4(),
+  from_date date not null default current_date,
+  thru_date date,
+  defined_by uuid not null references requirement_role_type(id),
+  for_party uuid not null,
+  related_to uuid not null references requirement(id),
+  CONSTRAINT requirement_role_pk PRIMARY key(id)
+);
+
+create table if not exists order_requirement_commitment(
+  id uuid DEFAULT uuid_generate_v4(),
+  requirement_id uuid not null references requirement(id),
+  order_item_id uuid not null,
+  CONSTRAINT order_requirement_commitment_pk PRIMARY key(id)
+);
