@@ -23,3 +23,8 @@ insert into quote_type (description) values ('Product Quote');
 insert into agreement_type (description) values ('Sales Agreement');
 insert into agreement_type (description) values ('Purchase Agreement');
 insert into agreement_type (description) values ('Employment Agreement');
+
+insert into agreement_item_type (description) values ('Sub Agreement');
+insert into agreement_item_type (description) values ('Agreement Section');
+insert into agreement_item_type (description) values ('Agreement Pricing Program');
+insert into agreement_item_type (description) values ('Agreement Exhibit');

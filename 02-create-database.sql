@@ -340,3 +340,48 @@ create table if not exists agreement_role(
   party_id uuid not null,
   CONSTRAINT agreement_role_pk PRIMARY key(id)
 );
+
+create table if not exists agreement_item_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT agreement_item_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT agreement_item_type_pk PRIMARY key(id)
+);
+
+create table if not exists agreement_item(
+  id uuid DEFAULT uuid_generate_v4(),
+  sequence bigint not null,
+  agreement_text text not null,
+  agreement_image text,
+  CONSTRAINT agreement_item_pk PRIMARY key(id)
+);
+
+create table if not exists agreement_organization_applicability(
+  id uuid DEFAULT uuid_generate_v4(),
+  agreement_item_id uuid not null references agreement(id),
+  party_id uuid not null,
+  CONSTRAINT agreeement_organization_applicability_pk PRIMARY key(id)
+);
+
+create table if not exists agreement_product_applicability(
+  id uuid DEFAULT uuid_generate_v4(),
+  agreement_item_id uuid not null references agreement(id),
+  product_id uuid not null,
+  CONSTRAINT agreement_product_applicability_pk PRIMARY key(id)
+);
+
+create table if not exists agreement_geographical_applicability(
+  id uuid DEFAULT uuid_generate_v4(),
+  agreement_item_id uuid not null references agreement(id),
+  geographic_boundary_id uuid not null,
+  CONSTRAINT agreement_geographical_applicability_pk PRIMARY key(id)
+);
+
+create table if not exists addendum(
+  id uuid DEFAULT uuid_generate_v4(),
+  creation_date date default current_date,
+  effective_date date not null,
+  "text" text not null CONSTRAINT addendum_text_not_empty CHECK (text <> ''),
+  modification_of_agreement_item uuid references agreement_item(id),
+  modification_of_agreement uuid references agreement(id),
+  CONSTRAINT addendum_pk PRIMARY key(id)
+);
