@@ -195,3 +195,57 @@ create table if not exists order_requirement_commitment(
   order_item_id uuid not null,
   CONSTRAINT order_requirement_commitment_pk PRIMARY key(id)
 );
+
+create table if not exists request_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT request_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT request_type_pk PRIMARY key(id)
+);
+
+create table if not exists request(
+  id uuid DEFAULT uuid_generate_v4(),
+  request_date date not null,
+  response_required_date date not null,
+  description text not null CONSTRAINT request_description_not_empty CHECK (description <> ''),
+  CONSTRAINT request_pk PRIMARY key(id)
+);
+
+create table if not exists request_item(
+  id uuid DEFAULT uuid_generate_v4(),
+  required_by_date date,
+  quantity bigint,
+  maximum_amount double precision,
+  description text,
+  request_id uuid not null references request(id),
+  CONSTRAINT request_item_pk PRIMARY key(id)
+);
+
+create table if not exists request_role_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT request_role_description_not_empty CHECK (description <> ''),
+  CONSTRAINT request_role_type_pk PRIMARY key(id)
+);
+
+create table if not exists request_role(
+  id uuid DEFAULT uuid_generate_v4(),
+  request_id uuid not null references request(id),
+  request_role_type uuid not null references request_role_type(id),
+  party_id uuid not null,
+  CONSTRAINT request_role_pk PRIMARY key(id)
+);
+
+create table if not exists responding_party(
+  id uuid DEFAULT uuid_generate_v4(),
+  date_sent date default current_date,
+  request_id uuid not null references request(id),
+  sent_to_contact_mechanism_id uuid not null,
+  party_id uuid not null,
+  CONSTRAINT responding_party_pk PRIMARY key(id)
+);
+
+create table if not exists requirement_request(
+  id uuid DEFAULT uuid_generate_v4(),
+  request_item_id uuid not null references request_item (id),
+  requirement_id uuid not null references requirement(id),
+  CONSTRAINT _pk PRIMARY key(id)
+);

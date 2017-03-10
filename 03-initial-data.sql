@@ -12,3 +12,7 @@ insert into requirement_type (description) values ('Customer Requirement');
 insert into requirement_type (description) values ('Internal Requirement');
 insert into requirement_type (description) values ('Product Requirement');
 insert into requirement_type (description) values ('Work Requirement');
+
+insert into request_type (description) values ('RFP');
+insert into request_type (description) values ('RFI');
+insert into request_type (description) values ('RFQ');
