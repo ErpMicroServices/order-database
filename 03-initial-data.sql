@@ -16,3 +16,6 @@ insert into requirement_type (description) values ('Work Requirement');
 insert into request_type (description) values ('RFP');
 insert into request_type (description) values ('RFI');
 insert into request_type (description) values ('RFQ');
+
+insert into quote_type (description) values ('Proposal');
+insert into quote_type (description) values ('Product Quote');

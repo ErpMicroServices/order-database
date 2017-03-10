@@ -27,6 +27,7 @@ create table if not exists order_item(
   product_feature uuid,
   order_id uuid not null references "order"(id),
   order_type_id uuid not null references order_type(id),
+  quote_item_id uuid,
   CONSTRAINT order_item_pk PRIMARY key(id)
 );
 
@@ -217,6 +218,7 @@ create table if not exists request_item(
   maximum_amount double precision,
   description text,
   request_id uuid not null references request(id),
+  quote_item uuid,
   CONSTRAINT request_item_pk PRIMARY key(id)
 );
 
@@ -248,4 +250,62 @@ create table if not exists requirement_request(
   request_item_id uuid not null references request_item (id),
   requirement_id uuid not null references requirement(id),
   CONSTRAINT _pk PRIMARY key(id)
+);
+
+create table if not exists quote_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT quote_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT quote_type_pk PRIMARY key(id)
+);
+
+create table if not exists quote(
+  id uuid DEFAULT uuid_generate_v4(),
+  issue_date date default current_date,
+  valid_from_date date not null default current_date,
+  valid_thru_date date,
+  description text not null CONSTRAINT existse_description_not_empty CHECK (description <> ''),
+  quote_type_id uuid not null references quote_type(id),
+  issued_by_party_id uuid not null,
+  given_to_party_id uuid not null,
+  CONSTRAINT quote_pk PRIMARY key(id)
+);
+
+create table if not exists quote_role_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT quote_role_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT quote_role_type_pk PRIMARY key(id)
+);
+
+create table if not exists quote_role(
+  id uuid DEFAULT uuid_generate_v4(),
+  party_id uuid not null,
+  described_by uuid not null references quote_role_type(id),
+  quote_id uuid not null references quote(id),
+  CONSTRAINT quote_role_pk PRIMARY key(id)
+);
+
+create table if not exists quote_term_type(
+  id uuid DEFAULT uuid_generate_v4(),
+  description text not null CONSTRAINT quote_term_type_description_not_empty CHECK (description <> ''),
+  CONSTRAINT quote_term_type_pk PRIMARY key(id)
+);
+
+create table if not exists quote_term(
+  id uuid DEFAULT uuid_generate_v4(),
+  value text not null CONSTRAINT quote_term_value_not_empty CHECK (value <> ''),
+  quote_item_id uuid,
+  qutoe_id uuid,
+  CONSTRAINT qutoe_term_pk PRIMARY key(id)
+);
+
+create table if not exists quote_item(
+  id uuid DEFAULT uuid_generate_v4(),
+  sequence bigint not null,
+  quantity bigint default 1,
+  quote_unit_price double precision,
+  estimated_delivery_date date,
+  comment text,
+  product_id uuid,
+  work_effort_id uuid,
+  CONSTRAINT quote_item_pk PRIMARY key(id)
 );
