@@ -1,6 +1,6 @@
 node_modules/
-!/order-database.iml
-!/.idea/
+/order-database.iml
+/.idea/
 /.idea/$CACHE_FILE$
 /.idea/codeStyles
 /.idea/compiler.xml
@@ -11,7 +11,7 @@ node_modules/
 /.idea/jsLinters/jslint.xml
 /.idea/misc.xml
 /.idea/modules.xml
-/order-database.iml
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/vcs.xml
 /.idea/workspace.xml
+/build/
