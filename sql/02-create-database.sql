@@ -181,9 +181,9 @@ create table if not exists order_status
 
 create table if not exists order_item_association
 (
-    id                  uuid DEFAULT uuid_generate_v4(),
-    sales_order_item    uuid not null references order_item (id),
-    purchase_order_item uuid not null references order_item (id),
+    id                     uuid DEFAULT uuid_generate_v4(),
+    sales_order_item_id    uuid not null references order_item (id),
+    purchase_order_item_id uuid not null references order_item (id),
     CONSTRAINT order_item_association_pk PRIMARY key (id)
 );
 
