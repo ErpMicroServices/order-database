@@ -9,31 +9,42 @@ create table if not exists order_type
 
 create table if not exists "order"
 (
-    id               uuid          DEFAULT uuid_generate_v4(),
-    order_identifier varchar(255),
-    order_date       date,
-    entry_date       date not null default CURRENT_DATE,
-    order_type_id    uuid not null references order_type (id),
+    id                                    uuid          DEFAULT uuid_generate_v4(),
+    order_identifier                      varchar(255),
+    order_date                            date,
+    entry_date                            date not null default CURRENT_DATE,
+    order_type_id                         uuid not null references order_type (id),
+    placed_by_party_role_id               uuid,
+    placed_using_contact_mechanism_id     uuid,
+    taken_via_contact_mechanism_id        uuid,
+    taken_by_party_role_id                uuid,
+    billing_location_contact_mechanism_id uuid,
+    with_requested_bill_to_party_role_id  uuid,
     CONSTRAINT order_pk PRIMARY key (id)
 );
 
 create table if not exists order_item
 (
-    id                      uuid   DEFAULT uuid_generate_v4(),
-    sequence_id             bigint not null,
-    quantity                bigint default 1,
-    unit_price              numeric(12, 3),
-    estimated_delivery_date date,
-    shipping_instructions   text,
-    item_description        text,
-    comment                 text,
-    corresponding_po_id     uuid,
-    ordered_with_id         uuid references order_item (id),
-    product_id              uuid,
-    product_feature_id      uuid,
-    order_id                uuid   not null references "order" (id),
-    order_type_id           uuid   not null references order_type (id),
-    quote_item_id           uuid,
+    id                                     uuid   DEFAULT uuid_generate_v4(),
+    sequence_id                            bigint not null,
+    quantity                               bigint default 1,
+    unit_price                             numeric(12, 3),
+    estimated_delivery_date                date,
+    shipping_instructions                  text,
+    item_description                       text,
+    comment                                text,
+    contact_mechanism_id                   uuid,
+    corresponding_po_id                    uuid,
+    ordered_with_id                        uuid references order_item (id),
+    party_role_id                          uuid,
+    product_id                             uuid,
+    product_feature_id                     uuid,
+    order_id                               uuid   not null references "order" (id),
+    order_type_id                          uuid   not null references order_type (id),
+    quote_item_id                          uuid,
+    placing_customer_party_role_id         uuid,
+    taken_by_party_role_id                 uuid,
+    with_a_requested_bill_to_party_role_id uuid,
     CONSTRAINT order_item_pk PRIMARY key (id)
 );
 
@@ -94,8 +105,10 @@ create table if not exists order_role_type
 create table if not exists order_role
 (
     id                   uuid          DEFAULT uuid_generate_v4(),
+    order_id             uuid not null references "order" (id),
     percent_contribution numeric(5, 2) default 1,
     assigned_to_party_id uuid not null,
+    order_role_type_id   uuid not null references order_item_role_type (id),
     CONSTRAINT order_role_pk PRIMARY key (id)
 );
 
