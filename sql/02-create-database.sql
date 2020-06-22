@@ -3,15 +3,17 @@ create table if not exists order_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT order_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES order_type (id),
     CONSTRAINT order_type_pk PRIMARY key (id)
 );
 
 create table if not exists "order"
 (
-    id            uuid          DEFAULT uuid_generate_v4(),
-    order_date    date,
-    entry_date    date not null default CURRENT_DATE,
-    order_type_id uuid not null references order_type (id),
+    id               uuid          DEFAULT uuid_generate_v4(),
+    order_identifier varchar(255),
+    order_date       date,
+    entry_date       date not null default CURRENT_DATE,
+    order_type_id    uuid not null references order_type (id),
     CONSTRAINT order_pk PRIMARY key (id)
 );
 
@@ -40,6 +42,7 @@ create table if not exists order_item_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT order_item_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES order_item_type (id),
     CONSTRAINT oreder_item_type_pk PRIMARY key (id)
 );
 
@@ -48,6 +51,7 @@ create table if not exists order_item_role_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT order_item_role_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES order_item_role_type (id),
     CONSTRAINT oreder_item_role_type_pk PRIMARY key (id)
 );
 
@@ -83,6 +87,7 @@ create table if not exists order_role_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT order_role_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES order_role_type (id),
     CONSTRAINT order_role_type_pk PRIMARY key (id)
 );
 
@@ -108,6 +113,7 @@ create table if not exists order_adjustment_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT order_adjustment_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES order_adjustment_type (id),
     CONSTRAINT order_adjustment_type_pk PRIMARY key (id)
 );
 
@@ -127,6 +133,7 @@ create table if not exists order_term_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT ordre_term_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES order_term_type (id),
     CONSTRAINT order_term_type_pk PRIMARY key (id)
 );
 
@@ -145,6 +152,7 @@ create table if not exists order_status_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT order_status_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES order_status_type (id),
     CONSTRAINT order_status_type_pk PRIMARY key (id)
 );
 
@@ -171,6 +179,7 @@ create table if not exists requirement_role_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT requirement_role_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES requirement_role_type (id),
     CONSTRAINT requirement_role_type_pk PRIMARY key (id)
 );
 
@@ -179,6 +188,7 @@ create table if not exists requirement_status_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT requirement_status_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES requirement_status_type (id),
     CONSTRAINT requirement_status_type_pk PRIMARY key (id)
 );
 
@@ -194,6 +204,7 @@ create table if not exists requirement_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT requirement_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES requirement_type (id),
     CONSTRAINT requirement_type_pk PRIMARY key (id)
 );
 
@@ -245,6 +256,7 @@ create table if not exists request_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT request_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES requirement_type (id),
     CONSTRAINT request_type_pk PRIMARY key (id)
 );
 
@@ -275,6 +287,7 @@ create table if not exists request_role_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT request_role_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES request_role_type (id),
     CONSTRAINT request_role_type_pk PRIMARY key (id)
 );
 
@@ -310,6 +323,7 @@ create table if not exists quote_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT quote_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES quote_type (id),
     CONSTRAINT quote_type_pk PRIMARY key (id)
 );
 
@@ -332,6 +346,7 @@ create table if not exists quote_role_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT quote_role_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES quote_role_type (id),
     CONSTRAINT quote_role_type_pk PRIMARY key (id)
 );
 
@@ -349,6 +364,7 @@ create table if not exists quote_term_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT quote_term_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES quote_term_type (id),
     CONSTRAINT quote_term_type_pk PRIMARY key (id)
 );
 
@@ -380,6 +396,7 @@ create table if not exists agreement_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT agreement_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES agreement_type (id),
     CONSTRAINT agreement_type_pk PRIMARY key (id)
 );
 
@@ -402,6 +419,7 @@ create table if not exists agreement_role_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT agreement_role_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES agreement_role_type (id),
     CONSTRAINT agreement_role_type_pk PRIMARY key (id)
 );
 
@@ -419,6 +437,7 @@ create table if not exists agreement_item_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT agreement_item_type_description_not_empty CHECK (description <> ''),
+    parent_id   UUID REFERENCES agreement_item_type (id),
     CONSTRAINT agreement_item_type_pk PRIMARY key (id)
 );
 
@@ -472,7 +491,8 @@ create table if not exists agreement_term_type
     id          uuid DEFAULT uuid_generate_v4(),
     description text not null
         CONSTRAINT agreement_term_type_description_not_empty CHECK (description <> ''),
-    CONSTRAINT agreeemnt_term_type_pk PRIMARY key (id)
+    parent_id   UUID REFERENCES agreement_term_type (id),
+    CONSTRAINT agreement_term_type_pk PRIMARY key (id)
 );
 
 create table if not exists agreement_term
