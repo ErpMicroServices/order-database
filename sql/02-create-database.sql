@@ -132,12 +132,12 @@ create table if not exists order_adjustment_type
 
 create table if not exists order_adjustment
 (
-    id                      uuid DEFAULT uuid_generate_v4(),
-    amount                  numeric(12, 3),
-    percentage              numeric(5, 2),
-    affecting_order_item_id uuid references order_item (id),
-    affecting_order_it      uuid references "order" (id),
-    described_by            uuid not null references order_adjustment_type (id),
+    id                       uuid DEFAULT uuid_generate_v4(),
+    amount                   numeric(12, 3),
+    percentage               numeric(5, 2),
+    affecting_order_item_id  uuid references order_item (id),
+    affecting_order_id       uuid references "order" (id),
+    order_adjustment_type_id uuid not null references order_adjustment_type (id),
     CONSTRAINT order_adjustment_pk PRIMARY key (id)
 );
 
