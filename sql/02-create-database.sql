@@ -284,6 +284,7 @@ create table if not exists request
     response_required_date date not null,
     description            text not null
         CONSTRAINT request_description_not_empty CHECK (description <> ''),
+    request_type_id        uuid not null references request_type (id),
     CONSTRAINT request_pk PRIMARY key (id)
 );
 
@@ -295,7 +296,7 @@ create table if not exists request_item
     maximum_amount   numeric(12, 3),
     description      text,
     request_id       uuid not null references request (id),
-    quote_item       uuid,
+    quote_item_id    uuid,
     CONSTRAINT request_item_pk PRIMARY key (id)
 );
 
@@ -310,10 +311,10 @@ create table if not exists request_role_type
 
 create table if not exists request_role
 (
-    id                uuid DEFAULT uuid_generate_v4(),
-    request_id        uuid not null references request (id),
-    request_role_type uuid not null references request_role_type (id),
-    party_id          uuid not null,
+    id                   uuid DEFAULT uuid_generate_v4(),
+    request_id           uuid not null references request (id),
+    request_role_type_id uuid not null references request_role_type (id),
+    party_id             uuid not null,
     CONSTRAINT request_role_pk PRIMARY key (id)
 );
 
@@ -324,6 +325,7 @@ create table if not exists responding_party
     request_id                   uuid not null references request (id),
     sent_to_contact_mechanism_id uuid not null,
     party_id                     uuid not null,
+    contact_mechanism_id         uuid not null,
     CONSTRAINT responding_party_pk PRIMARY key (id)
 );
 
