@@ -371,10 +371,10 @@ create table if not exists quote_role_type
 
 create table if not exists quote_role
 (
-    id           uuid DEFAULT uuid_generate_v4(),
-    party_id     uuid not null,
-    described_by uuid not null references quote_role_type (id),
-    quote_id     uuid not null references quote (id),
+    id                 uuid DEFAULT uuid_generate_v4(),
+    party_id           uuid not null,
+    quote_role_type_id uuid not null references quote_role_type (id),
+    quote_id           uuid not null references quote (id),
     CONSTRAINT quote_role_pk PRIMARY key (id)
 );
 
@@ -387,19 +387,10 @@ create table if not exists quote_term_type
     CONSTRAINT quote_term_type_pk PRIMARY key (id)
 );
 
-create table if not exists quote_term
-(
-    id            uuid DEFAULT uuid_generate_v4(),
-    value         text not null
-        CONSTRAINT quote_term_value_not_empty CHECK (value <> ''),
-    quote_item_id uuid,
-    qutoe_id      uuid,
-    CONSTRAINT qutoe_term_pk PRIMARY key (id)
-);
-
 create table if not exists quote_item
 (
     id                      uuid   DEFAULT uuid_generate_v4(),
+    quote_id                uuid   not null references quote (id),
     sequence                bigint not null,
     quantity                bigint default 1,
     quote_unit_price        numeric(12, 3),
@@ -409,6 +400,17 @@ create table if not exists quote_item
     work_effort_id          uuid,
     CONSTRAINT quote_item_pk PRIMARY key (id)
 );
+
+create table if not exists quote_term
+(
+    id                 uuid DEFAULT uuid_generate_v4(),
+    value              numeric(12, 3) not null,
+    quote_term_type_id uuid           not null references quote_term_type (id),
+    quote_item_id      uuid references quote_item (id),
+    quote_id           uuid references quote (id),
+    CONSTRAINT quote_term_pk PRIMARY key (id)
+);
+
 
 create table if not exists agreement_type
 (
