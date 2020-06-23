@@ -522,11 +522,20 @@ create table if not exists agreement_term_type
 
 create table if not exists agreement_term
 (
-    id                uuid          DEFAULT uuid_generate_v4(),
-    from_date         date not null default current_date,
-    thru_date         date,
-    value             text not null,
-    agreement_item_id uuid references agreement_item (id),
-    agreement_id      uuid,
+    id                     uuid                    DEFAULT uuid_generate_v4(),
+    from_date              date           not null default current_date,
+    thru_date              date,
+    value                  numeric(12, 3) not null,
+    agreement_item_id      uuid references agreement_item (id),
+    agreement_id           uuid references agreement (id),
+    agreement_term_type_id uuid           not null references agreement_term_type (id),
     CONSTRAINT agreement_term_pk PRIMARY key (id)
 );
+
+create table if not exists agreement_price_component
+(
+    id                 uuid DEFAULT uuid_generate_v4(),
+    price_component_id uuid not null,
+    agreement_item_id  uuid not null references agreement_item_type (id),
+    CONSTRAINT agreement_price_component_pk PRIMARY key (id)
+)
